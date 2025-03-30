@@ -1,0 +1,118 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.card {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e5e7eb;
+  width: 500px;
+}
+
+.notification {
+  border-bottom: 2px solid #f3f4f6;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.notification-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.notification-amount {
+  font-weight: 700;
+  color: #2563eb;
+}
+.notification-subtitle {
+  color: #4b5563;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: 700;  /* Đậm hơn */
+  font-size: 1.1rem;
+}
+
+.button-container {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.button {
+  padding: 1rem 2rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button:hover {
+  transform: scale(1.05);
+}
+
+.connect-button {
+  background-color: #1f2937;
+  color: white;
+  border: 1px solid #111827;
+}
+
+.claim-button {
+  background-color: #2563eb;
+  color: white;
+  border: 1px solid #1d4ed8;
+  
+}
+
+.success-message {
+  text-align: center;
+  color: #059669;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #ecfdf5;
+  border-radius: 0.5rem;
+  border: 1px solid #34d399;
+}
+
+.balance-info {
+  text-align: center;
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.balance-amount {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.swap-button {
+  background-color: #7c3aed; /* Purple color for distinction */
+  color: white;
+  border: 1px solid #6d28d9;
+}
+
+.swap-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.swap-arrow {
+  color: #6b7280;
+  font-size: 1.2rem;
+}
