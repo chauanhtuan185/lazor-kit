@@ -143,4 +143,4 @@ function checkBrowserWebAuthnSupport(): boolean {
   }
 }
 
-export { claim , transfer , checkBrowserWebAuthnSupport, createSigpassWallet , checkSigpassWallet };
+export { transfer , checkBrowserWebAuthnSupport, createSigpassWallet , checkSigpassWallet };
