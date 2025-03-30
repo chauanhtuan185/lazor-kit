@@ -4,7 +4,6 @@ import { useState } from "react";
 import { 
   createSigpassWallet, 
   transfer,
-  claim,
 } from "../src/lib/sigpass";
 
 import { Button } from "../src/component/login-button";
@@ -17,8 +16,7 @@ export default function App() {
   const [loadingSig, setLoadingSig] = useState(false);
   const [claimSuccess, setClaimSuccess] = useState(false);
   const [balance, setBalance] = useState<string>('0');
-  const [transferLoading, ] = useState(false);
-  const [recipient, setRecipient] = useState<string>(""); // State để lưu địa chỉ ví người nhận
+ 
   const [explorerUrl, setExplorerUrl] = useState<string | null>(null); // State để lưu URL giao dịch
   const [showPopup, setShowPopup] = useState(false); // State để hiển thị popup
 
@@ -81,35 +79,6 @@ export default function App() {
   }
 
   async function claimUSDC() {
-    try {
-      setLoadingSig(true);
-      try {
-        const txid = await claim();
-        if (!txid) {
-          throw new Error("Transaction ID is undefined or null");
-        }
-        console.log("Transaction ID:", txid); // Log to verify
-        setSig(txid);
-        await delay(2); // Wait 2 seconds
-        const url = `https://explorer.solana.com/tx/${txid}?cluster=custom&customUrl=https%3A%2F%2Frpc.lazorkit.xyz`;
-        console.log("Explorer URL:", url);
-        setExplorerUrl(url);
-        setShowPopup(true);
-        setClaimSuccess(true);
-        setBalance("10");
-      } catch (error) {
-        console.error("Claim failed:", error);
-        setClaimSuccess(false); // Update state to reflect failure
-        setLoadingSig(false); // Stop loading
-      }
-    } catch (error) {
-      console.error("Error claiming USDC:", error);
-    } finally {
-      setLoadingSig(false);
-    }
-  }
-
-  async function transferUSDC() {
     setLoadingSig(true);
     try {
       const credentialId = localStorage.getItem('CREDENTIAL_ID');
@@ -134,14 +103,22 @@ export default function App() {
         throw new Error('Popup blocked. Please allow popups and try again.');
       }
 
-      const signaturePromise = new Promise((_resolve, reject) => {
-        const handleMessage = (event: MessageEvent) => {
+      const signaturePromise = new Promise(async (_resolve, reject) => {
+        const handleMessage = async (event: MessageEvent) => {
           if (event.data.type === 'SIGNATURE_CREATED') {
             const { normalized , msg , publickey} = event.data.data;
             console.log("Signature:", normalized);
             console.log("Message:", msg);
-            const sig = transfer( msg , normalized, publickey);
+            const txid = await transfer( msg , normalized, publickey);
+            setSig(txid);
+            await delay(2); 
+            const url = `https://explorer.solana.com/tx/${txid}?cluster=custom&customUrl=https%3A%2F%2Frpc.lazorkit.xyz`;
+            console.log("Explorer URL:", url);
+            setExplorerUrl(url);
+            setShowPopup(true);
             setBalance('10');
+            setClaimSuccess(true);
+            setLoadingSig(false);
             window.removeEventListener('message', handleMessage);
             popup.close();
           } else if (event.data.type === 'SIGNATURE_ERROR') {
@@ -167,16 +144,16 @@ export default function App() {
           window.removeEventListener('message', handleMessage);
           reject(new Error('Signature timeout'));
         }, 60000);
+
       });
 
       await signaturePromise;
 
     } catch (error) {
       console.error("Error claiming USDC:", error);
-    } finally {
-      setLoadingSig(false);
     }
   }
+
 
   return (
     <div className="container">
@@ -232,24 +209,7 @@ export default function App() {
             </Button>
           )}
 
-          {claimSuccess && (
-            <div className="transfer-container">
-              <input
-                type="text"
-                className="recipient-input"
-                placeholder="Enter recipient address"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-              />
-              <Button 
-                className={`button transfer-button`}
-                onClick={transferUSDC}
-                disabled={transferLoading}
-              >
-                {transferLoading ? "Transferring..." : "Transfer"}
-              </Button>
-            </div>
-          )}
+        
         </div>
       </div>
 
