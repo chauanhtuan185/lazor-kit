@@ -19,7 +19,9 @@ import {
 import { createVerifyAndExecuteTransaction } from '../service/verifyAndExecute';
 import { Connection, PublicKey , Keypair } from '@solana/web3.js';
 
-const connection = new Connection('https://rpc.lazorkit.xyz:8900/', "confirmed");
+const connection = new Connection('https://rpc.lazorkit.xyz:8899',{
+  wsEndpoint: 'https://rpc.lazorkit.xyz:8900/', "commitment": "confirmed"
+});
 
 
 function delay(seconds: number): Promise<void> {
